@@ -6,7 +6,7 @@
   <title>Learn Norwegian Flashcards</title>
   <style>
     body {
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Comic Sans MS', cursive, sans-serif !important;
       background-color: #f0f9ff;
       margin: 0;
       padding: 20px;
@@ -19,7 +19,7 @@
 
     .container {
       width: 100%;
-      max-width: 900px; /* Beheld same breidde på PC */
+      max-width: 900px; /* litt breiare for å få plass til to kolonnar */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -45,14 +45,14 @@
       margin-bottom: 20px;
     }
 
-    /* Hovudoppsett: to kolonnar side om side på PC */
+    /* Hovudoppsett: to kolonnar side om side */
     .main-content {
       display: flex;
-      flex-wrap: wrap; /* Pakkar seg om skjermen er smal */
+      flex-wrap: wrap; /* gjer at det pakkar seg om skjermen er smal */
       justify-content: center;
       align-items: flex-start;
       width: 100%;
-      gap: 20px; /* Avstand mellom kolonnane */
+      gap: 20px; /* avstand mellom kolonnane */
       margin-bottom: 20px;
     }
 
@@ -61,7 +61,7 @@
       flex-direction: column;
       align-items: center;
       flex: 1;
-      min-width: 280px; /* Minimum breidde for flashkort-delen */
+      min-width: 280px; /* litt smalare min-width om du ønskjer mindre breidde */
     }
 
     .toggles-column {
@@ -72,10 +72,10 @@
       min-width: 280px;
     }
 
-    /* Toggle-containere */
+    /* Justerer litt spacing på toggle-containerar */
     .toggle-container {
       width: 100%;
-      margin-bottom: 15px; /* Litt mindre spacing */
+      margin-bottom: 15px; /* litt mindre spacing */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -91,7 +91,7 @@
     .dialect-toggle,
     .ui-language-toggle {
       display: flex;
-      margin: 5px 0; /* Litt mindre margin */
+      margin: 5px 0; /* litt mindre margin */
       background: white;
       border-radius: 20px;
       padding: 8px;
@@ -440,7 +440,7 @@
             <option value="food">Їжа / Mat</option>
             <option value="family">Сім'я / Familie</option>
             <option value="colors">Кольори / Farger</option>
-            <option value="numbers">Числа / Tall</option>
+            <option value="numbers">випадковий / Tilfeldig</option>
           </select>
         </div>
       </div>
