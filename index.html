@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learn Norwegian Flashcards</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f0f9ff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(to bottom, #c1e3ff, #ffffff);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px; /* litt breiare for å få plass til to kolonnar */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    .title {
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: #3498db;
+      margin-bottom: 20px;
+    }
+
+    /* Hovudoppsett: to kolonnar side om side */
+    .main-content {
+      display: flex;
+      flex-wrap: wrap; /* gjer at det pakkar seg om skjermen er smal */
+      justify-content: center;
+      align-items: flex-start;
+      width: 100%;
+      gap: 20px; /* avstand mellom kolonnane */
+      margin-bottom: 20px;
+    }
+
+    .flashcard-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      min-width: 280px; /* litt smalare min-width om du ønskjer mindre breidde */
+    }
+
+    .toggles-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    /* Justerer litt spacing på toggle-containerar */
+    .toggle-container {
+      width: 100%;
+      margin-bottom: 15px; /* litt mindre spacing */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .toggle-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #2c3e50;
+    }
+
+    .language-toggle,
+    .dialect-toggle,
+    .ui-language-toggle {
+      display: flex;
+      margin: 5px 0; /* litt mindre margin */
+      background: white;
+      border-radius: 20px;
+      padding: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      justify-content: center;
+    }
+
+    .language-btn,
+    .dialect-btn {
+      padding: 6px 10px;
+      margin: 0 3px;
+      border: none;
+      border-radius: 15px;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      flex: 1;
+      max-width: 120px;
+    }
+
+    .language-btn.active {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .dialect-btn.active {
+      background-color: #9b59b6;
+      color: white;
+    }
+
+    .ui-language-btn {
+      padding: 6px 10px;
+      margin: 0 3px;
+      border: none;
+      border-radius: 15px;
+      background-color: #f39c12;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+      flex: 1;
+      max-width: 120px;
+    }
+
+    .ui-language-btn.active {
+      background-color: #e67e22;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3) inset;
+    }
+
+    .flashcard-container {
+      position: relative;
+      width: 300px;
+      height: 400px;
+      perspective: 1000px;
+      margin: 0 0 20px 0;
+    }
+
+    .flashcard {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .flashcard-front,
+    .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .flashcard-front {
+      background-color: #ffffff;
+      border: 5px solid #74b9ff;
+    }
+
+    .flashcard-back {
+      background-color: #74b9ff;
+      transform: rotateY(180deg);
+      border: 5px solid #ffffff;
+    }
+
+    .flipped {
+      transform: rotateY(180deg);
+    }
+
+    .emoji {
+      font-size: 100px;
+      margin-bottom: 20px;
+    }
+
+    .word {
+      font-size: 32px;
+      text-align: center;
+      margin: 15px 0;
+      color: #2c3e50;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      margin: 0 0 20px 0;
+      width: 100%;
+    }
+
+    .control-btn {
+      padding: 10px 15px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 50px;
+      background-color: #2ecc71;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s;
+      min-width: 40px;
+    }
+
+    .control-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .control-btn.prev {
+      background-color: #e74c3c;
+    }
+
+    .progress-container {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 0 15px 0;
+      background-color: #e0e0e0;
+      border-radius: 10px;
+      height: 15px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background-color: #3498db;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .score-display {
+      margin: 0 0 20px 0;
+      font-size: 18px;
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    .celebration {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      z-index: 100;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .celebration-content {
+      text-align: center;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from {
+        transform: scale(1);
+      }
+      to {
+        transform: scale(1.1);
+      }
+    }
+
+    .restart-btn {
+      padding: 10px 20px;
+      background-color: #f39c12;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s;
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .category-selector {
+      width: 100%;
+      max-width: 400px;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    .category-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #2c3e50;
+      display: block;
+    }
+
+    .category-select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 15px;
+      border: 2px solid #3498db;
+      font-size: 16px;
+      font-family: inherit;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .instructions {
+      background-color: white;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 10px 0 20px 0;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .instructions h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title" id="title">Вивчай Норвезьку🇳🇴🎉! / Lær Norsk!</h1>
+      <p class="subtitle" id="subtitle">Картки для запам'ятовування / Flashkort</p>
+    </div>
+
+    <div class="main-content">
+      <!-- Venstre kolonne: flashcard, navigasjon, framgang -->
+      <div class="flashcard-column">
+        <div class="flashcard-container">
+          <div class="flashcard">
+            <div class="flashcard-front">
+              <div class="emoji">🐱</div>
+              <div class="word" id="front-word">Кіт</div>
+            </div>
+            <div class="flashcard-back">
+              <div class="emoji">🐱</div>
+              <div class="word" id="back-word">Katt</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="control-btn prev" id="prev-btn">←</button>
+          <button class="control-btn" id="flip-btn">Перевернути</button>
+          <button class="control-btn" id="next-btn">→</button>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar" id="progress"></div>
+        </div>
+
+        <div class="score-display" id="score-display">
+          Картка: <span id="current-card">1</span>/<span id="total-cards">10</span>
+        </div>
+      </div>
+
+      <!-- Høgre kolonne: val (UI-språk, dialekt, etc.) -->
+      <div class="toggles-column">
+        <div class="toggle-container">
+          <div class="toggle-label" id="ui-lang-label">Мова інтерфейсу / Språk:</div>
+          <div class="ui-language-toggle">
+            <button class="ui-language-btn active" data-ui-lang="uk" id="uk-ui-btn">Українська</button>
+            <button class="ui-language-btn" data-ui-lang="no" id="no-ui-btn">Norsk</button>
+          </div>
+        </div>
+
+        <div class="toggle-container">
+          <div class="toggle-label" id="card-lang-label">Показувати спочатку:</div>
+          <div class="language-toggle">
+            <button class="language-btn active" data-lang="uk" id="front-uk-btn">Українська</button>
+            <button class="language-btn" data-lang="no" id="front-no-btn">Norsk</button>
+          </div>
+        </div>
+
+        <div class="toggle-container">
+          <div class="toggle-label" id="dialect-label">Норвезький діалект / Norsk dialekt:</div>
+          <div class="dialect-toggle">
+            <button class="dialect-btn active" data-dialect="bm" id="bokmal-btn">Bokmål</button>
+            <button class="dialect-btn" data-dialect="nn" id="nynorsk-btn">Nynorsk</button>
+          </div>
+        </div>
+
+        <div class="category-selector">
+          <label for="category-select" class="category-label" id="category-label">Категорія / Kategori:</label>
+          <select id="category-select" class="category-select">
+            <option value="all">Усі слова / Alle ord</option>
+            <option value="animals">Тварини / Dyr</option>
+            <option value="food">Їжа / Mat</option>
+            <option value="family">Сім'я / Familie</option>
+            <option value="colors">Кольори / Farger</option>
+            <option value="numbers">Числа / Tall</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instruksjonane under alt -->
+    <div class="instructions" id="instructions">
+      <h3 id="instructions-title">Інструкції</h3>
+      <p id="instructions-text">
+        Натисніть на картку, щоб побачити переклад. Використовуйте кнопки для переходу між картками.
+        Виберіть діалект норвезької мови (Bokmål або Nynorsk).
+      </p>
+    </div>
+  </div>
+
+  <div class="celebration" id="celebration">
+    <div class="celebration-content">
+      <div class="emoji">🎉</div>
+      <h2 id="celebration-title">Вітаємо!</h2>
+      <p id="celebration-text">Ти пройшов усі картки!</p>
+    </div>
+    <button class="restart-btn" id="restart-btn">Почати знову</button>
+  </div>
+
+  <script>
+    // Card data - contains Ukrainian and Norwegian (Bokmål and Nynorsk) words
+    const allCards = [
+      // Animals - Тварини / Dyr
+      { emoji: "🐱", uk: "Кіт", bm: "Katt", nn: "Katt", category: "animals" },
+      { emoji: "🐶", uk: "Собака", bm: "Hund", nn: "Hund", category: "animals" },
+      { emoji: "🐮", uk: "Корова", bm: "Ku", nn: "Ku", category: "animals" },
+      { emoji: "🐴", uk: "Кінь", bm: "Hest", nn: "Hest", category: "animals" },
+      { emoji: "🐷", uk: "Свиня", bm: "Gris", nn: "Gris", category: "animals" },
+      { emoji: "🐰", uk: "Кролик", bm: "Kanin", nn: "Kanin", category: "animals" },
+      { emoji: "🐦", uk: "Птах", bm: "Fugl", nn: "Fugl", category: "animals" },
+      { emoji: "🐟", uk: "Риба", bm: "Fisk", nn: "Fisk", category: "animals" },
+      { emoji: "🦊", uk: "Лисиця", bm: "Rev", nn: "Rev", category: "animals" },
+      { emoji: "🐻", uk: "Ведмідь", bm: "Bjørn", nn: "Bjørn", category: "animals" },
+
+      // Food - Їжа / Mat
+      { emoji: "🍎", uk: "Яблуко", bm: "Eple", nn: "Eple", category: "food" },
+      { emoji: "🍌", uk: "Банан", bm: "Banan", nn: "Banan", category: "food" },
+      { emoji: "🍞", uk: "Хліб", bm: "Brød", nn: "Brød", category: "food" },
+      { emoji: "🥛", uk: "Молоко", bm: "Melk", nn: "Mjølk", category: "food" },
+      { emoji: "🧀", uk: "Сир", bm: "Ost", nn: "Ost", category: "food" },
+      { emoji: "🍗", uk: "Курка", bm: "Kylling", nn: "Kylling", category: "food" },
+      { emoji: "🥚", uk: "Яйце", bm: "Egg", nn: "Egg", category: "food" },
+      { emoji: "🍓", uk: "Полуниця", bm: "Jordbær", nn: "Jordbær", category: "food" },
+      { emoji: "🥕", uk: "Морква", bm: "Gulrot", nn: "Gulrot", category: "food" },
+      { emoji: "🍫", uk: "Шоколад", bm: "Sjokolade", nn: "Sjokolade", category: "food" },
+
+      // Family - Сім'я / Familie
+      { emoji: "👨", uk: "Тато", bm: "Pappa", nn: "Pappa", category: "family" },
+      { emoji: "👩", uk: "Мама", bm: "Mamma", nn: "Mamma", category: "family" },
+      { emoji: "👦", uk: "Хлопчик", bm: "Gutt", nn: "Gut", category: "family" },
+      { emoji: "👧", uk: "Дівчинка", bm: "Jente", nn: "Jente", category: "family" },
+      { emoji: "👴", uk: "Дідусь", bm: "Bestefar", nn: "Bestefar", category: "family" },
+      { emoji: "👵", uk: "Бабуся", bm: "Bestemor", nn: "Bestemor", category: "family" },
+      { emoji: "👨‍👩‍👧‍👦", uk: "Сім'я", bm: "Familie", nn: "Familie", category: "family" },
+      { emoji: "👶", uk: "Немовля", bm: "Baby", nn: "Baby", category: "family" },
+      { emoji: "👫", uk: "Друзі", bm: "Venner", nn: "Venner", category: "family" },
+      { emoji: "💑", uk: "Пара", bm: "Par", nn: "Par", category: "family" },
+
+      // Colors - Кольори / Farger
+      { emoji: "🔴", uk: "Червоний", bm: "Rød", nn: "Raud", category: "colors" },
+      { emoji: "🔵", uk: "Синій", bm: "Blå", nn: "Blå", category: "colors" },
+      { emoji: "🟢", uk: "Зелений", bm: "Grønn", nn: "Grøn", category: "colors" },
+      { emoji: "🟡", uk: "Жовтий", bm: "Gul", nn: "Gul", category: "colors" },
+      { emoji: "⚫", uk: "Чорний", bm: "Svart", nn: "Svart", category: "colors" },
+      { emoji: "⚪", uk: "Білий", bm: "Hvit", nn: "Kvit", category: "colors" },
+      { emoji: "🟤", uk: "Коричневий", bm: "Brun", nn: "Brun", category: "colors" },
+      { emoji: "🟠", uk: "Помаранчевий", bm: "Oransje", nn: "Oransje", category: "colors" },
+      { emoji: "🟣", uk: "Фіолетовий", bm: "Lilla", nn: "Lilla", category: "colors" },
+      { emoji: "🔘", uk: "Сірий", bm: "Grå", nn: "Grå", category: "colors" },
+
+      // Other useful words
+      { emoji: "🏠", uk: "Будинок", bm: "Hus", nn: "Hus", category: "numbers" },
+      { emoji: "🌞", uk: "Сонце", bm: "Sol", nn: "Sol", category: "numbers" },
+      { emoji: "🌧️", uk: "Дощ", bm: "Regn", nn: "Regn", category: "numbers" },
+      { emoji: "🌈", uk: "Веселка", bm: "Regnbue", nn: "Regnboge", category: "numbers" },
+      { emoji: "👋", uk: "Привіт", bm: "Hei", nn: "Hei", category: "numbers" },
+      { emoji: "1️⃣", uk: "Один", bm: "En", nn: "Ein", category: "numbers" },
+      { emoji: "2️⃣", uk: "Два", bm: "To", nn: "To", category: "numbers" },
+      { emoji: "3️⃣", uk: "Три", bm: "Tre", nn: "Tre", category: "numbers" },
+      { emoji: "4️⃣", uk: "Чотири", bm: "Fire", nn: "Fire", category: "numbers" },
+      { emoji: "5️⃣", uk: "П'ять", bm: "Fem", nn: "Fem", category: "numbers" }
+    ];
+
+    let cards = [...allCards]; // Start med alle kort
+
+    // UI-tekst i begge språk
+    const uiText = {
+      uk: {
+        title: "Вивчай Норвезьку!",
+        subtitle: "Картки для запам'ятовування",
+        instructionsTitle: "Інструкції",
+        instructions:
+          "Натисніть на картку, щоб побачити переклад. Використовуйте кнопки для переходу між картками. Виберіть діалект норвезької мови (Bokmål або Nynorsk).",
+        flipButton: "Перевернути",
+        scoreDisplay: "Картка:",
+        celebrationTitle: "Вітаємо!",
+        celebrationText: "Ти пройшов усі картки!",
+        restartButton: "Почати знову",
+        ukButton: "Українська",
+        noButton: "Норвезька",
+        uiLangLabel: "Мова інтерфейсу:",
+        cardLangLabel: "Показувати спочатку:",
+        dialectLabel: "Норвезький діалект:",
+        categoryLabel: "Категорія:",
+        allWords: "Усі слова",
+        animals: "Тварини",
+        food: "Їжа",
+        family: "Сім'я",
+        colors: "Кольори",
+        numbers: "Числа"
+      },
+      no: {
+        title: "Lær norsk med flashcards🇳🇴🎉",
+        subtitle: "Flashkort",
+        instructionsTitle: "Instruksjonar",
+        instructions:
+          "Klikk på kortet for å sjå oversettinga. Bruk knappar for å navigere mellom korta. Velg norsk språkvariant (Bokmål eller Nynorsk).",
+        flipButton: "Snu",
+        scoreDisplay: "Kort:",
+        celebrationTitle: "Gratulerer!",
+        celebrationText: "Du har fullført alle korta!",
+        restartButton: "Start på nytt",
+        ukButton: "Ukrainsk",
+        noButton: "Norsk",
+        uiLangLabel: "Vel språk:",
+        cardLangLabel: "Vis kort på:",
+        dialectLabel: "Norsk dialekt:",
+        categoryLabel: "Kategori:",
+        allWords: "Alle ord",
+        animals: "Dyr",
+        food: "Mat",
+        family: "Familie",
+        colors: "Fargar",
+        numbers: "Tall"
+      }
+    };
+
+    let currentCardIndex = 0;
+    let isNorwegianFirst = false;
+    let currentDialect = "bm"; // Standard er Bokmål
+    let uiLanguage = "uk"; // Standard UI-språk er ukrainsk
+
+    const flashcard = document.querySelector(".flashcard");
+    const frontWord = document.getElementById("front-word");
+    const backWord = document.getElementById("back-word");
+    const frontEmoji = document.querySelector(".flashcard-front .emoji");
+    const backEmoji = document.querySelector(".flashcard-back .emoji");
+    const progressBar = document.getElementById("progress");
+    const currentCardElement = document.getElementById("current-card");
+    const totalCardsElement = document.getElementById("total-cards");
+    const celebration = document.getElementById("celebration");
+    const flipBtn = document.getElementById("flip-btn");
+    const scoreDisplay = document.getElementById("score-display");
+    const instructionsTitle = document.getElementById("instructions-title");
+    const instructionsText = document.getElementById("instructions-text");
+    const celebrationTitle = document.getElementById("celebration-title");
+    const celebrationText = document.getElementById("celebration-text");
+    const restartBtn = document.getElementById("restart-btn");
+    const title = document.getElementById("title");
+    const subtitle = document.getElementById("subtitle");
+    const categorySelect = document.getElementById("category-select");
+    const uiLangLabel = document.getElementById("ui-lang-label");
+    const cardLangLabel = document.getElementById("card-lang-label");
+    const dialectLabel = document.getElementById("dialect-label");
+    const categoryLabel = document.getElementById("category-label");
+
+    // Initialiserer kort med totalt antall
+    totalCardsElement.textContent = cards.length;
+    updateCard();
+    updateProgress();
+
+    // Vend kortet ved klikk
+    flashcard.addEventListener("click", () => {
+      flashcard.classList.toggle("flipped");
+    });
+
+    // Flip-knapp
+    flipBtn.addEventListener("click", () => {
+      flashcard.classList.toggle("flipped");
+    });
+
+    // Neste knapp
+    document.getElementById("next-btn").addEventListener("click", () => {
+      if (currentCardIndex < cards.length - 1) {
+        currentCardIndex++;
+        flashcard.classList.remove("flipped");
+        updateCard();
+        updateProgress();
+      } else {
+        celebration.style.display = "flex";
+      }
+    });
+
+    // Forrige knapp
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      if (currentCardIndex > 0) {
+        currentCardIndex--;
+        flashcard.classList.remove("flipped");
+        updateCard();
+        updateProgress();
+      }
+    });
+
+    // Restart-knapp
+    restartBtn.addEventListener("click", () => {
+      currentCardIndex = 0;
+      flashcard.classList.remove("flipped");
+      updateCard();
+      updateProgress();
+      celebration.style.display = "none";
+    });
+
+    // Språktoggle for kort
+    const languageBtns = document.querySelectorAll(".language-btn");
+    languageBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        languageBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        isNorwegianFirst = btn.dataset.lang === "no";
+        updateCard();
+      });
+    });
+
+    // Dialekttoggle
+    const dialectBtns = document.querySelectorAll(".dialect-btn");
+    dialectBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        dialectBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentDialect = btn.dataset.dialect;
+        updateCard();
+      });
+    });
+
+    // UI-språktoggle
+    const uiLanguageBtns = document.querySelectorAll(".ui-language-btn");
+    uiLanguageBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        uiLanguageBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        uiLanguage = btn.dataset.uiLang;
+        updateUILanguage();
+      });
+    });
+
+    // Kategori-velger
+    categorySelect.addEventListener("change", () => {
+      const category = categorySelect.value;
+      if (category === "all") {
+        cards = [...allCards];
+      } else {
+        cards = allCards.filter((card) => card.category === category);
+      }
+      currentCardIndex = 0;
+      flashcard.classList.remove("flipped");
+      totalCardsElement.textContent = cards.length;
+      updateCard();
+      updateProgress();
+    });
+
+    // Oppdaterer innholdet på kortet
+    function updateCard() {
+      if (cards.length === 0) return;
+      const card = cards[currentCardIndex];
+      if (isNorwegianFirst) {
+        frontWord.textContent = card[currentDialect];
+        backWord.textContent = card.uk;
+      } else {
+        frontWord.textContent = card.uk;
+        backWord.textContent = card[currentDialect];
+      }
+      frontEmoji.textContent = card.emoji;
+      backEmoji.textContent = card.emoji;
+      currentCardElement.textContent = currentCardIndex + 1;
+    }
+
+    // Oppdaterer progresjonen
+    function updateProgress() {
+      if (cards.length === 0) return;
+      const progress = ((currentCardIndex + 1) / cards.length) * 100;
+      progressBar.style.width = `${progress}%`;
+    }
+
+    // Oppdaterer UI-språket
+    function updateUILanguage() {
+      const text = uiText[uiLanguage];
+      title.textContent = text.title;
+      subtitle.textContent = text.subtitle;
+      instructionsTitle.textContent = text.instructionsTitle;
+      instructionsText.textContent = text.instructions;
+      flipBtn.textContent = text.flipButton;
+      scoreDisplay.textContent = `${text.scoreDisplay} ${currentCardIndex + 1}/${cards.length}`;
+      celebrationTitle.textContent = text.celebrationTitle;
+      celebrationText.textContent = text.celebrationText;
+      restartBtn.textContent = text.restartButton;
+
+      // Oppdaterer knappetekst for kortspråk
+      document.getElementById("front-uk-btn").textContent = text.ukButton;
+      document.getElementById("front-no-btn").textContent = text.noButton;
+
+      // Oppdaterer etiketter
+      uiLangLabel.textContent = text.uiLangLabel;
+      cardLangLabel.textContent = text.cardLangLabel;
+      dialectLabel.textContent = text.dialectLabel;
+      categoryLabel.textContent = text.categoryLabel;
+
+      // Oppdaterer kategori-alternativer
+      const options = categorySelect.options;
+      options[0].text = text.allWords;
+      options[1].text = text.animals;
+      options[2].text = text.food;
+      options[3].text = text.family;
+      options[4].text = text.colors;
+      options[5].text = text.numbers;
+    }
+  </script>
+</body>
+</html>
