@@ -19,7 +19,7 @@
 
     .container {
       width: 100%;
-      max-width: 900px; /* litt breiare for å få plass til to kolonnar */
+      max-width: 900px; /* Beheld same breidde på PC */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -45,14 +45,14 @@
       margin-bottom: 20px;
     }
 
-    /* Hovudoppsett: to kolonnar side om side */
+    /* Hovudoppsett: to kolonnar side om side på PC */
     .main-content {
       display: flex;
-      flex-wrap: wrap; /* gjer at det pakkar seg om skjermen er smal */
+      flex-wrap: wrap; /* Pakkar seg om skjermen er smal */
       justify-content: center;
       align-items: flex-start;
       width: 100%;
-      gap: 20px; /* avstand mellom kolonnane */
+      gap: 20px; /* Avstand mellom kolonnane */
       margin-bottom: 20px;
     }
 
@@ -61,7 +61,7 @@
       flex-direction: column;
       align-items: center;
       flex: 1;
-      min-width: 280px; /* litt smalare min-width om du ønskjer mindre breidde */
+      min-width: 280px; /* Minimum breidde for flashkort-delen */
     }
 
     .toggles-column {
@@ -72,10 +72,10 @@
       min-width: 280px;
     }
 
-    /* Justerer litt spacing på toggle-containerar */
+    /* Toggle-containere */
     .toggle-container {
       width: 100%;
-      margin-bottom: 15px; /* litt mindre spacing */
+      margin-bottom: 15px; /* Litt mindre spacing */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -91,7 +91,7 @@
     .dialect-toggle,
     .ui-language-toggle {
       display: flex;
-      margin: 5px 0; /* litt mindre margin */
+      margin: 5px 0; /* Litt mindre margin */
       background: white;
       border-radius: 20px;
       padding: 8px;
@@ -346,11 +346,31 @@
       margin-top: 0;
       color: #2c3e50;
     }
+
+    /* Media query for mobil (små skjermar) */
+    @media (max-width: 600px) {
+      .main-content {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .flashcard-column,
+      .toggles-column {
+        width: 100%;
+        min-width: auto;
+      }
+      .ui-language-toggle,
+      .language-toggle,
+      .dialect-toggle,
+      .category-selector {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
+      <!-- Her kan du endre tittel og undertekst via UI-språket -->
       <h1 class="title" id="title">Вивчай Норвезьку🇳🇴🎉! / Lær Norsk!</h1>
       <p class="subtitle" id="subtitle">Картки для запам'ятовування / Flashkort</p>
     </div>
@@ -386,7 +406,7 @@
         </div>
       </div>
 
-      <!-- Høgre kolonne: val (UI-språk, dialekt, etc.) -->
+      <!-- Høgre kolonne: toggles (UI-språk, dialekt, etc.) -->
       <div class="toggles-column">
         <div class="toggle-container">
           <div class="toggle-label" id="ui-lang-label">Мова інтерфейсу / Språk:</div>
