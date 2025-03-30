@@ -443,7 +443,8 @@
             <option value="food">Їжа / Mat</option>
             <option value="family">Сім'я / Familie</option>
             <option value="colors">Кольори / Farger</option>
-            <option value="numbers">випадковий / Tilfeldig</option>
+            <option value="random">Випадковий / Tilfeldig</option>
+            <option value="numbers">Числа / Tall</option>
           </select>
         </div>
       </div>
@@ -469,7 +470,7 @@
   </div>
 
   <script>
-    // Card data - contains Ukrainian and Norwegian (Bokmål and Nynorsk) words
+    // Kortdata med deling av "Other useful words" i to kategorier:
     const allCards = [
       // Animals - Тварини / Dyr
       { emoji: "🐱", uk: "Кіт", bm: "Katt", nn: "Katt", category: "animals" },
@@ -519,12 +520,12 @@
       { emoji: "🟣", uk: "Фіолетовий", bm: "Lilla", nn: "Lilla", category: "colors" },
       { emoji: "🔘", uk: "Сірий", bm: "Grå", nn: "Grå", category: "colors" },
 
-      // Other useful words
-      { emoji: "🏠", uk: "Будинок", bm: "Hus", nn: "Hus", category: "numbers" },
-      { emoji: "🌞", uk: "Сонце", bm: "Sol", nn: "Sol", category: "numbers" },
-      { emoji: "🌧️", uk: "Дощ", bm: "Regn", nn: "Regn", category: "numbers" },
-      { emoji: "🌈", uk: "Веселка", bm: "Regnbue", nn: "Regnboge", category: "numbers" },
-      { emoji: "👋", uk: "Привіт", bm: "Hei", nn: "Hei", category: "numbers" },
+      // Other useful words delt opp i to kategorier:
+      { emoji: "🏠", uk: "Будинок", bm: "Hus", nn: "Hus", category: "random" },
+      { emoji: "🌞", uk: "Сонце", bm: "Sol", nn: "Sol", category: "random" },
+      { emoji: "🌧️", uk: "Дощ", bm: "Regn", nn: "Regn", category: "random" },
+      { emoji: "🌈", uk: "Веселка", bm: "Regnbue", nn: "Regnboge", category: "random" },
+      { emoji: "👋", uk: "Привіт", bm: "Hei", nn: "Hei", category: "random" },
       { emoji: "1️⃣", uk: "Один", bm: "En", nn: "Ein", category: "numbers" },
       { emoji: "2️⃣", uk: "Два", bm: "To", nn: "To", category: "numbers" },
       { emoji: "3️⃣", uk: "Три", bm: "Tre", nn: "Tre", category: "numbers" },
@@ -558,6 +559,7 @@
         food: "Їжа",
         family: "Сім'я",
         colors: "Кольори",
+        random: "Випадковий",
         numbers: "Числа"
       },
       no: {
@@ -581,7 +583,8 @@
         animals: "Dyr",
         food: "Mat",
         family: "Familie",
-        colors: "Fargar",
+        colors: "Farger",
+        random: "Tilfeldig",
         numbers: "Tall"
       }
     };
@@ -762,7 +765,8 @@
       options[2].text = text.food;
       options[3].text = text.family;
       options[4].text = text.colors;
-      options[5].text = text.numbers;
+      options[5].text = text.random;
+      options[6].text = text.numbers;
     }
   </script>
 </body>
